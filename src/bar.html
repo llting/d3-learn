@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>bar</title>
+    <script src="../lib/d3.v5.js"></script>
+</head>
+<body>
+    <input id="sort" type="button" value="排序">
+    <input id="add" type="button" value="增加数据">
+    <script>
+        const dataset = [50,112,78,96,220], 
+            width = 400, 
+            height = 400,
+            rectStepWidth = 35,
+            rectWidth = 30;
+        const svg = d3.select('body').append('svg')
+                        .attr('width',width)
+                        .attr('height',height);
+        const rect = svg.selectAll('rect').data(dataset).enter().append('rect').attr('fill','skyblue').attr('class','myRect')
+                        .attr("width",rectWidth).attr('x',function(d,i){
+                            return i * rectStepWidth
+                        })
+                        .attr('y',function(d){
+                            return height - d
+                        })
+                        .attr('height',function(d){
+                            return d
+                        });
+        const text = svg.selectAll(".myText").data(dataset).enter().append('text').attr('fill','white').attr('class','myText')
+                        .attr('font-size','14px').attr('x',function(d,i){
+                            return  i * rectStepWidth
+                        })
+                        .attr('y',function(d){
+                            return height - d
+                        })
+                        .attr('dx',function(){
+                            return rectWidth / 2
+                        })
+                        .attr('dy',function(){
+                            return '1em'
+                        })
+                        .attr('text-anchor','middle')
+                        .text(function(d){
+                            return d
+                        })
+
+        // 更新数据
+        function draw(){
+            // 获取矩形的 update 部分
+            // 在获取DOM集合的时候，一定要注意选取到的是同一组dom，当类名写错的时候，会新建一组dom
+            var updateRect = svg.selectAll('.myRect').data(dataset)
+            var enterRect = updateRect.enter()
+            var exitRect = updateRect.exit()
+            // 获取文字的 upadte 部分
+            var updateText = svg.selectAll('.myText').data(dataset)
+            var enterText = updateText.enter()
+            var exitText = updateText.exit()
+            // 相应处理方法
+            updateRect.attr('fill','skyblue').attr('width',rectWidth).attr('height',function(d,i){
+                return d
+            })
+            .attr('width',rectWidth)
+            .attr('x',function(d,i){
+                return i * rectStepWidth
+            })
+            .attr('y',function(d){
+                return height - d
+            });
+
+            enterRect.append('rect').attr('class','myRect').attr('fill','#303030').attr('width',rectWidth).attr('height',function(d,i){
+                return d
+            })
+            .attr('width',rectWidth)
+            .attr('x',function(d,i){
+                return i * rectStepWidth
+            })
+            .attr('y',function(d){
+                return height - d
+            });
+
+            exitRect.remove()
+
+          
+
+            // 文字部分处理方法
+            updateText.attr('fill','white').attr('class','myText')
+                        .attr('font-size','14px').attr('x',function(d,i){
+                            return  i * rectStepWidth
+                        })
+                        .attr('y',function(d){
+                            return height - d
+                        })
+                        .attr('dx',function(){
+                            return rectWidth / 2
+                        })
+                        .attr('dy',function(){
+                            return '1em'
+                        })
+                        .attr('text-anchor','middle')
+                        .text(function(d){
+                            return d
+                        })
+            enterText.append('text').attr('fill','white').attr('class','myText')
+                        .attr('font-size','14px').attr('x',function(d,i){
+                            return  i * rectStepWidth
+                        })
+                        .attr('y',function(d){
+                            return height - d
+                        })
+                        .attr('dx',function(){
+                            return rectWidth / 2
+                        })
+                        .attr('dy',function(){
+                            return '1em'
+                        })
+                        .attr('text-anchor','middle')
+                        .text(function(d){
+                            return d
+                        })
+            exitText.remove()
+
+        }
+        sort.addEventListener('click',() => {
+            dataset.sort(d3.ascending)
+            
+            return draw()
+        })
+        
+    </script>
+</body>
+</html>
