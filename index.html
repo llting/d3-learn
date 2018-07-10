@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+    <script>
+      // paragraph = "Bob hit a ball, the hit BALL flew far after it was hit."
+// banned = ["hit"]
+
+function compare(a, b) {
+  if (a === b) {
+    return 0;
+  }
+
+  return a < b ? -1 : 1;
+}
+
+function equal(a, b) {
+  return compare(a, b) === 0;
+}
+
+
+
+var mostCommonWord = function(paragraph, banned) {
+    let paragraphArr = typeof paragraph == "string"  && paragraph.split(" ") || []
+    let bannedArr = Array.isArray(banned) && [...banned] || []
+    let curValue = ""
+    let preValue = ""
+    let preCount = 0;
+    let curCount = 0;
+    // 统计词的个数
+    
+    // 任意一个元素和其余元素进行比较，有相同的，统计其个数，查看是否在限制数组中
+
+    //没有的 放到一个数组中
+
+    // 比较上一次统计个数与这次哪个大，大的话 更新数组元素
+    if(paragraphArr.length == 1){
+      return paragraphArr[0]
+    } 
+    for(let i = 0; i < paragraphArr.length; i++) {
+      let currentindex = i
+      for(let j = 0; j < paragraphArr.length; j++) {
+        if( i !== j && equal(paragraphArr[currentindex],paragraphArr[j]) && bannedArr.indexOf(paragraphArr[currentindex]) < 0){
+            curCount += 1
+            curValue = paragraphArr[currentindex]
+        }
+      }
+      if(preCount < curCount){
+        preValue = curValue
+        preCount = curValue
+      }
+      curCount = 0
+    }
+      
+    
+    return preValue
+}; 
+var result = mostCommonWord("Bob hit a ball, the hit BALL flew far after it was hit.",
+["hit"])
+console.log(result)
+
+    </script>
+</body>
+</html>
+
